@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center>
+    <h3><strong><i class="fas fa-film"></i>&nbsp;{{watch_detail}}</strong></h3>
+    <iframe style="margin-bottom: 25px;" allowfullscreen="true" frameborder="0" height="400px;" mozallowfullscreen="true" scrolling="no"
+            src="{{watch_link}}" webkitallowfullscreen="true" width="70%"></iframe>
+</center>
+
+{% endblock %}

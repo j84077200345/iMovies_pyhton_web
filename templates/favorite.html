@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    /* Opacity #1 */
+    .hover11 figure img {
+        opacity: 1;
+        -webkit-transition: .3s ease-in-out;
+        transition: .3s ease-in-out;
+    }
+    .hover11 figure:hover img {
+        opacity: .5;
+    }
+</style>
+
+<div class="row">
+
+    {% for video in user_video %}
+    <div class="col-lg-4 col-sm-6 text-center mb-4 hover11">
+
+        <figure><img style="width:150px; height:150px;" class="rounded-circle img-fluid d-block mx-auto"
+                     src="{{video.Img}}"
+                     alt=""></figure>
+
+        <h6>{{video.Title}}</h6>
+
+        <form action="/watch" method="post" style="display: inline-block;">
+            <input type="hidden" name="watch" value="{{video.Link}}">
+            <input type="hidden" name="watch_title" value="{{video.Title}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-info btn-sm"
+                    type="submit"><i class="far fa-eye"></i>&nbsp;Watch
+            </button>
+        </form>
+
+        <form action="/delete" method="post" style="display: inline-block;">
+            <input type="hidden" name="link" value="{{video.Link}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-dark btn-sm" type="submit">
+                <i class="far fa-trash-alt"></i>&nbsp;Delete
+            </button>
+        </form>
+
+        <input type="hidden" name="watch" value="{{video.Link}}">
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

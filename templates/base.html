@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>iMovies</title>
+
+    <!-- Bootstrap core CSS -->
+    {% include "html_reference.html" %}
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/round-about.css" rel="stylesheet">
+    <style>
+        #myBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed/sticky position */
+            bottom: 20px; /* Place the button at the bottom of the page */
+            right: 30px; /* Place the button 30px from the right */
+            z-index: 99; /* Make sure it does not overlap */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: dodgerblue; /* Set a background color */
+            color: white; /* Text color */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 15px; /* Some padding */
+            border-radius: 10px; /* Rounded corners */
+            font-size: 18px; /* Increase font size */
+        }
+
+        #myBtn:hover {
+            background-color: lightblue; /* Add a dark-grey background on hover */
+        }
+        .category_button {
+            background-color: transparent;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid;
+            -webkit-transition: all 0.2s ease-in;
+            -moz-transition: all 0.2s ease-in;
+            -o-transition: all 0.2s ease-in;
+            transition: all 0.2s ease-in;
+            margin: 3px;
+            padding: 10px 30px 8px;
+            font-size: 16px;
+            font-family: "proxima-nova", sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.2rem;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+        .category_button:hover{
+            text-decoration: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .button-neutral{
+            color: #000;
+            border-color: #000;
+        }
+        .button-neutral:hover{
+            color: #fff;
+            background-color: #000;
+        }
+
+
+
+    </style>
+    <script>
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("myBtn").style.display = "block";
+            } else {
+                document.getElementById("myBtn").style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">i&nbsp;<i class="fas fa-heart fa-xs"></i>&nbsp;Movies</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                {% if session['account'] %}
+                <li class="nav-item active">
+                    <span class="nav-link"><i class="far fa-user"></i>&nbsp;{{session['name']}}
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i>&nbsp;Login
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i>&nbsp;Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/favorite"><i class="far fa-heart"></i>&nbsp;Favorite</a>
+                </li>
+                <li class="nav-item active">
+                    <form class="form-inline mt-2 mt-md-0" action="/result">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Only Chinese Search..."
+                               aria-label="Search"
+                               name="search" required>
+                        <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">
+                            <i class="fas fa-search"></i>&nbsp;Search
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Introduction Row -->
+    <center>
+        <h1 class="my-4">
+            <img width="100%" src="/static/img/Text.gif">
+        </h1>
+        <p>Disclaimer: This site is made by "re-home" and its just a video exchange site. All data is collected by
+            publishers on the Internet.
+            This site does not participate in uploading, publishing, software
+            development, etc... events, nor does it provide any video downloads, nor does it save any video files on the
+            site server.</p>
+
+        <a style="text-decoration:none" href="/category/action">
+            <button style="display:inline;" class="category_button button-neutral" type="submit">Action</button>
+        </a>
+        <a style="text-decoration:none" href="/category/drama">
+            <button class="category_button button-neutral" type="submit">Drama</button>
+        </a>
+        <a style="text-decoration:none" href="/category/fantasy">
+            <button class="category_button button-neutral" type="submit">Fantasy</button>
+        </a>
+        <a style="text-decoration:none" href="/category/comedy">
+            <button class="category_button button-neutral" type="submit">Comedy</button>
+        </a>
+        <a style="text-decoration:none" href="/category/horror">
+            <button class="category_button button-neutral" type="submit">Horror</button>
+        </a>
+    </center>
+
+    <br/>
+    <!-- Team Members Row -->
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Re-Home iMovie 2018</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+</body>
+
+</html>

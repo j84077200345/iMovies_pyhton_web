@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    /* Opacity #1 */
+    .hover11 figure img {
+        opacity: 1;
+        -webkit-transition: .3s ease-in-out;
+        transition: .3s ease-in-out;
+    }
+    .hover11 figure:hover img {
+        opacity: .5;
+    }
+</style>
+
+<div class="row">
+
+    {% for movie in range (1,25) %}
+    {% if '{}'.format(movie) in all_movie %}
+    <div class="col-lg-4 col-sm-6 text-center mb-4 hover11">
+        <figure><img style="width:150px; height:150px;" class="rounded-circle img-fluid d-block mx-auto"
+                     src="{{all_movie.get('{}'.format(movie))['img']}}"
+                     alt=""></figure>
+
+
+        <h6>{{all_movie.get('{}'.format(movie))['title']}}
+            <small>{{all_movie.get('{}'.format(movie))['time']}}</small>
+        </h6>
+
+        <a style="display: block; color:white;" class="btn btn-secondary btn-sm" data-toggle="collapse"
+           data-target="#{{'{}'.format(movie)}}"><i class="fas fa-caret-down"></i>&nbsp;More
+            Details...</a>
+        <div class="collapse" id="{{'{}'.format(movie)}}">
+            <div class="card card-body">
+                {{all_movie.get('{}'.format(movie))['content']}}
+            </div>
+        </div>
+
+        <form action="/watch" method="post" style="display: inline-block;">
+            <input type="hidden" name="watch" value="{{all_movie.get('{}'.format(movie))['link']}}">
+            <input type="hidden" name="watch_title" value="{{all_movie.get('{}'.format(movie))['title']}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-info btn-sm"
+                    type="submit"><i class="far fa-eye"></i>&nbsp;Watch
+            </button>
+        </form>
+
+        {% if session['account'] %}
+        {% if "{}".format(all_movie.get('{}'.format(movie))['link']) in favorite_video %}
+        <form style="display: inline-block;">
+            <button style="position: relative; top:7px;" disabled class="btn btn-outline-secondary btn-sm"
+                    type="button"><i class="fas fa-plus"></i>&nbsp;Added
+            </button>
+        </form>
+        {% endif %}
+        {% if "{}".format(all_movie.get('{}'.format(movie))['link']) not in favorite_video %}
+        <form action="/favorite" method="post" style="display: inline-block;">
+            <input type="hidden" name="url" value="{{url}}">
+            <input type="hidden" name="title" value="{{all_movie.get('{}'.format(movie))['title']}}">
+            <input type="hidden" name="link" value="{{all_movie.get('{}'.format(movie))['link']}}">
+            <input type="hidden" name="img" value="{{all_movie.get('{}'.format(movie))['img']}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-danger btn-sm" type="submit">
+                <i class="far fa-heart"></i>&nbsp;Favorite
+            </button>
+        </form>
+        {% endif %}
+        {% endif %}
+
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+
+{% endblock %}

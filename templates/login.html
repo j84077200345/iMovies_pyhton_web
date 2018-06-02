@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form style="text-align: center; height:397px; position: relative; top: 20px;" action="/login" method="post">
+    <div class="form-group">
+        <strong>
+            <label for="exampleInputAccount">
+                <i class="far fa-user-circle">&nbsp;</i>Account
+            </label>
+        </strong>
+        <input type="text" class="form-control" name="InputAccount" id="exampleInputAccount"
+               aria-describedby="accountHelp"
+               placeholder="Enter account" required>
+    </div>
+    <div class="form-group">
+        <strong>
+            <label for="exampleInputPassword">
+                <i class="fas fa-unlock-alt"></i>&nbsp;Password
+            </label>
+        </strong>
+        <input type="password" class="form-control" name="InputPassword" id="exampleInputPassword"
+               placeholder="Password" required>
+    </div>
+    <small id="accountHelp" class="form-text text-muted">{{message}}</small>
+    <a href="/register"><h6>Register</h6></a>
+
+    <div class="form-group">
+        <button style="position: relative; top: 6px;" type="submit" class="btn btn-primary">
+            <i class="fas fa-dove"></i>&nbsp;Sign in
+        </button>
+    </div>
+</form>
+
+{% endblock %}

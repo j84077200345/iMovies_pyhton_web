@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    /* Opacity #1 */
+    .hover11 figure img {
+        opacity: 1;
+        -webkit-transition: .3s ease-in-out;
+        transition: .3s ease-in-out;
+    }
+    .hover11 figure:hover img {
+        opacity: .5;
+    }
+
+    .slide-nav {
+        height: 70px;
+        background-color: #fff;
+        position: relative;
+    }
+    .slide-right-outsize {
+        color: #01c0c8;
+        width: 40px;
+        height: 100%;
+        cursor: pointer;
+        text-align: center;
+        line-height: 75px;
+        position: absolute;
+        z-index: 101;
+        top: 0;
+        right: 0;
+        background-color: #fff;
+    }
+    .slide-right {
+        color: #01c0c8;
+        width: 40px;
+        height: 100%;
+        cursor: pointer;
+        /*border: 1px solid #fff;*/
+        text-align: center;
+        line-height: 75px;
+        position: absolute;
+        z-index: 101;
+        top: 0;
+        right: 40px;
+        background-color: #fff;
+    }
+    .slide-center {
+        display: block;
+        width: 100%;
+        /*border: 1px solid #fff;*/
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .slide-center.open{
+        left: -50px;
+    }
+
+    .list-cat {
+        margin-right: 80px;
+        white-space: nowrap;
+        margin-left: 80px;
+        height: 100%;
+        padding-top: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: all .7s ease;
+        -webkit-transition: all .5s ease;
+        -moz-transition: all .5s ease;
+        -o-transition: all .5s ease;
+        user-select: none;
+    }
+    .box-cat {
+        margin-right: 15px;
+        /*border: 1px solid #ddd;*/
+        width: 40px;
+        height: 100%;
+        display: inline-block;
+        vertical-align: top;
+
+    }
+    .cat-preview {
+        background-color: white;
+        border: 1px solid #01c0c8;
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+        font-size: 20px;
+        text-align: center;
+        color: #01c0c8;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .slide-left-outsize {
+        color: #01c0c8;
+        width: 40px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 101;
+        text-align: center;
+        line-height: 75px;
+        cursor: pointer;
+        background-color: #fff
+    }
+    .slide-left {
+        color: #01c0c8;
+        width: 40px;
+        height: 100%;
+        cursor: pointer;
+        /*border: 1px solid #fff;*/
+        text-align: center;
+        line-height: 75px;
+        position: absolute;
+        z-index: 101;
+        top: 0;
+        left: 40px;
+        background-color: #fff;
+    }
+
+</style>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var slide = 0;
+        $(".slide-left").click(function() {
+            slide = slide + 150;
+            if (slide > 0) {
+                slide = 0;
+            }
+            $(".list-cat").css({'left': slide+'px'});
+        });
+
+        $(".slide-right").click(function() {
+            slide = slide - 150;
+            let listWidth = $(".list-cat").width();
+            let centerWidth = $(".slide-center").width() - 160;
+            if (slide < -(listWidth - centerWidth)) {
+                slide = -(listWidth - centerWidth);
+            }
+            $(".list-cat").css({'left': slide+'px'});
+        });
+
+        $(".slide-left-outsize").click(function() {
+            slide = 0;
+            $(".list-cat").css({'left': slide});
+        });
+
+        $(".slide-right-outsize").click(function() {
+            let listWidth = $(".list-cat").width();
+            let centerWidth = $(".slide-center").width() - 160;
+            slide = -(listWidth - centerWidth);
+            $(".list-cat").css({'left': slide+'px'});
+        });
+    });
+
+</script>
+
+<div class="row">
+
+    {% for movie in range (1,25) %}
+    {% if '{}'.format(movie) in all_movie %}
+    <div class="col-lg-4 col-sm-6 text-center mb-4 hover11">
+        <figure><img style="width:150px; height:150px;" class="rounded-circle img-fluid d-block mx-auto"
+                     src="{{all_movie.get('{}'.format(movie))['img']}}"
+                     alt=""></figure>
+
+
+        <h6>{{all_movie.get('{}'.format(movie))['title']}}
+            <small>{{all_movie.get('{}'.format(movie))['time']}}</small>
+        </h6>
+
+        <a style="display: block; color:white;" class="btn btn-secondary btn-sm" data-toggle="collapse"
+           data-target="#{{'{}'.format(movie)}}"><i class="fas fa-caret-down"></i>&nbsp;More
+            Details...</a>
+        <div class="collapse" id="{{'{}'.format(movie)}}">
+            <div class="card card-body">
+                {{all_movie.get('{}'.format(movie))['content']}}
+            </div>
+        </div>
+
+        <form action="/watch" method="post" style="display: inline-block;">
+            <input type="hidden" name="watch" value="{{all_movie.get('{}'.format(movie))['link']}}">
+            <input type="hidden" name="watch_title" value="{{all_movie.get('{}'.format(movie))['title']}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-info btn-sm"
+                    type="submit"><i class="far fa-eye"></i>&nbsp;Watch
+            </button>
+        </form>
+
+        {% if session['account'] %}
+        {% if "{}".format(all_movie.get('{}'.format(movie))['link']) in favorite_video %}
+        <form style="display: inline-block;">
+            <button style="position: relative; top:7px;" disabled class="btn btn-outline-secondary btn-sm"
+                    type="button"><i class="fas fa-plus"></i>&nbsp;Added
+            </button>
+        </form>
+        {% endif %}
+        {% if "{}".format(all_movie.get('{}'.format(movie))['link']) not in favorite_video %}
+        <form action="/favorite" method="post" style="display: inline-block;">
+            <input type="hidden" name="url" value="{{url}}">
+            <input type="hidden" name="title" value="{{all_movie.get('{}'.format(movie))['title']}}">
+            <input type="hidden" name="link" value="{{all_movie.get('{}'.format(movie))['link']}}">
+            <input type="hidden" name="img" value="{{all_movie.get('{}'.format(movie))['img']}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-danger btn-sm" type="submit">
+                <i class="far fa-heart"></i>&nbsp;Favorite
+            </button>
+        </form>
+        {% endif %}
+        {% endif %}
+
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+
+<!--<nav aria-label="Page navigation example">-->
+<!--<ul class="pagination justify-content-center">-->
+<!--<li class="page-item disabled">-->
+<!--<a class="page-link" href="#" aria-label="Previous">-->
+<!--<span aria-hidden="true">&laquo;</span>-->
+<!--<span class="sr-only">Previous</span>-->
+<!--</a>-->
+<!--</li>-->
+
+<!--{% for page in all_page %}-->
+<!--<form action="/home_page" method="post">-->
+<!--<li class="page-item">-->
+<!--<button style="border-radius: 0%" class="page-link" type="submit">-->
+<!--<input type="hidden" name="page" value="{{all_page.get(page)}}">-->
+<!--{{page}}-->
+<!--</button>-->
+<!--</li>-->
+<!--</form>-->
+<!--{% endfor %}-->
+
+<!--<li class="page-item disabled">-->
+<!--<a class="page-link" href="#" aria-label="Previous">-->
+<!--<span aria-hidden="true">&raquo;</span>-->
+<!--<span class="sr-only">Previous</span>-->
+<!--</a>-->
+<!--</li>-->
+<!--</ul>-->
+<!--</nav>-->
+
+<div class="container">
+    <div class="slide-nav">
+        <div class="slide-left-outsize">
+            <i class="fas fa-angle-double-left fa-2x"></i>
+        </div>
+        <div class="slide-left">
+            <i class="fas fa-angle-left fa-2x"></i>
+        </div>
+        <div class="slide-center">
+            <div class="list-cat">
+                {% for page in all_page %}
+                <div style="width: 40px; height: 40px;" class="box-cat">
+                    <form style="width: 40px; height: 40px;" action="/home_page" method="post">
+                        <button type="submit" class="cat-preview">{{page}}
+                            <input type="hidden" name="page" value="{{all_page.get(page)}}">
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="slide-right">
+            <i class="fas fa-angle-right fa-2x"></i>
+        </div>
+        <div class="slide-right-outsize">
+            <i class="fas fa-angle-double-right fa-2x"></i>
+        </div>
+    </div>
+</div>
+{% endblock %}
