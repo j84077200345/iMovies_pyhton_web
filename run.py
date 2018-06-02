@@ -10,11 +10,14 @@ app.secret_key = "jack6114"
 @app.before_first_request
 def init_db():
     Database.initialize()
-    session['account'] = None
-    session['name'] = None
+    session['account'] = session.get('account')
+    session['name'] = session.get('name')
 
 @app.route("/")
 def hello():
+    session['account'] = session.get('account')
+    session['name'] = session.get('name')
+
     url = request.url
     favorite_video = []
     user_favorite = Video.find_video(session['account'])
