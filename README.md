@@ -34,4 +34,11 @@ static 和 templates folder 是 Flask API 預設參考到的資料夾
 function => 爬蟲程式重點 (最後要把不同的爬蟲整合在一個item.py module內)  
 * soup.find_all() => return list => 要用for loop查找裡面內容  
 * element.get('attribute') => 取出html tag內特定數屬性  
-* re.findall(".....[\S]+", data_source) => return 資料來源的型態
+* re.findall(".....[\S]+", data_source) => re是正規化表示法, \S為非空白字元 => return 資料來源的型態
+* check 是否為empty list => if not list_name:  
+* "~".split() => return list  
+* dictionary {} => page['key'] = value  
+* all_movie.get('key') 或 all_movie['key'] => 均為取出dict中的key值
+----------------------------------------------------------------
+## Step 3:  
+搭配Bootstrap建立基底頁面
