@@ -222,4 +222,127 @@ function => 爬蟲程式重點 (最後要把不同的爬蟲整合在一個item.p
   ```
 -------------------------------------------------------
 ## Step 8:  
-  
+* Favorite Page (favorite.hmtl): 含加入功能和刪除功能
+  * 建立Video class (video.py):  
+  ```
+  class Video(object):
+    def __init__(self, account, title, link, img):
+        self.account = account
+        self.title = title
+        self.link = link
+        self.img = img
+
+    def save_to_db(self):
+        Database.insert(collection='videos', data=self.json())
+
+    def json(self):
+        return {
+            "Account": self.account,
+            "Title": self.title,
+            "Link": self.link,
+            "Img": self.img
+        }
+
+    @staticmethod
+    def find_video(account):
+        user_video = Database.find(collection='videos', query={"Account": account})
+        return user_video
+
+    @staticmethod
+    def delete_video(account, link):
+        Database.remove(collection='videos', query={"Account": account, "Link": link})
+  ```
+  * run.py
+  ```
+  @app.route("/favorite", methods=['GET','POST'])
+  def favorite_method():
+    if session['account']:
+        if request.method == 'POST':
+            url = request.form['url']  /*app.route("/result")要新增 url=request.url*/
+            title = request.form['title']
+            link = request.form['link']
+            img = request.form['img']
+            account = session['account']
+            Video(account, title, link, img).save_to_db()
+            return redirect(url)
+        else:
+            account = session['account']
+            user_video = Video.find_video(account)
+            return render_template("favorite.html", user_video=user_video)
+    else:
+        return redirect("/login")
+  ```
+  * result.html新增Favorite button
+  ```
+  <form style="display: inline-block;" action="/favorite" method="post">
+            <input type="hidden" name="url" value="{{url}}">
+            <input type="hidden" name="title" value="{{all_movie.get('{}'.format(movie))['title']}}">
+            <input type="hidden" name="link" value="{{all_movie.get('{}'.format(movie))['link']}}">
+            <input type="hidden" name="img" value="{{all_movie.get('{}'.format(movie))['img']}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-danger btn-sm" type="submit">
+                <i class="far fa-heart"></i>&nbsp;Favorite
+            </button>
+  </form>
+  ```
+  * favorite.html
+  ```
+  {% for video in user_video %}
+    改成{{ video.Link }}
+  {% endfor %}
+  ```
+  * 刪除功能 (run.py)  
+  ```
+  @app.route("/delete", methods=['POST'])
+  def delete_method():
+     link = request.form['link']
+     account = session['account']
+     Video.delete_video(account, link)
+     return redirect("/favorite")
+  ```
+  * favorite.html 新增
+  ```
+  <form action="/delete" method="post" style="display: inline-block;">
+            <input type="hidden" name="link" value="{{video.Link}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-dark btn-sm" type="submit">
+                <i class="far fa-trash-alt"></i>&nbsp;Delete
+            </button>
+  </form>
+  ```
+  * 避免重複加入我的最愛 (run.py)  
+  在result_page()中新增  
+  ```
+  favorite_video = []
+    user_favorite = Video.find_video(session['account'])
+    for video in user_favorite:
+        favorite_video.append(video['Link'])
+  ```
+  result.html => 加判斷式判斷使用者是否登入，並check其最愛的內容
+  ```
+  {% if session['account'] %}
+        {% if "{}".format(all_movie.get('{}'.format(movie))['link']) in favorite_video %}
+        <form style="display: inline-block;">
+            <button style="position: relative; top:7px;" disabled class="btn btn-outline-secondary btn-sm"
+                    type="button"><i class="fas fa-plus"></i>&nbsp;Added
+            </button>
+        </form>
+        {% endif %}
+        {% if "{}".format(all_movie.get('{}'.format(movie))['link']) not in favorite_video %}
+        <form style="display: inline-block;" action="/favorite" method="post">
+            <input type="hidden" name="url" value="{{url}}">
+            <input type="hidden" name="title" value="{{all_movie.get('{}'.format(movie))['title']}}">
+            <input type="hidden" name="link" value="{{all_movie.get('{}'.format(movie))['link']}}">
+            <input type="hidden" name="img" value="{{all_movie.get('{}'.format(movie))['img']}}">
+            <button style="position: relative; top:7px;" class="btn btn-outline-danger btn-sm" type="submit">
+                <i class="far fa-heart"></i>&nbsp;Favorite
+            </button>
+        </form>
+        {% endif %}
+  {% endif %}
+  ```
+  -----------------------------------------------------------
+  ## Step 9:  
+  * upload to Heroku: 新建4個file
+    1. .gitignore => library (告訴Heroku要使用的環境)
+    2. Procfile => web:  gunicorn run:app
+    3. requirements.txt => (告訴Heroku要install的套件)
+    4. runtime.txt => python-3.6.4 (告訴Heroku要使用的python版本)  
