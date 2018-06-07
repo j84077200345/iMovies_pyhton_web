@@ -1,5 +1,5 @@
-# iMovies_pyhton_web
-## 這是一個使用python爬蟲和Flask框架所撰寫成的線上免費電影網站
+# iMovies_pyhton_web  
+> 這是一個使用python爬蟲和Flask框架所撰寫成的線上免費電影網站
 ----------------------------------------------------------------
 ## Pyhton Web 開發 (使用PyCharm IDE)
 架構： 使用 Pyhton web Framework => Flask  
@@ -7,10 +7,10 @@
 2.     Back-end: Pyhton web crawler  
 ----------------------------------------------------------------
 ## 專案類別圖
-> Method => Find web content, Find title, Find link, Find img, Find content  
-> Video => title, link, img, Favorite(), Delete()  
-> User => Account(Only one), Password, Name
------------------------------------------------------------------
+* Method => Find web content, Find title, Find link, Find img, Find content  
+* Video => title, link, img, `Favorite()`, `Delete()`  
+* User => Account(Only one), Password, Name  
+-----------------------------------------------------------------  
 ## Step 1:  
 New Project --> iMovies --> Using virtualenv 命名為Library (虛擬開發環境是為了避免不同專案import 套件時重複或搞混)  
 > Project Directory:  
