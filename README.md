@@ -1,5 +1,5 @@
 # iMovies_pyhton_web  
-> 這是一個使用python爬蟲和Flask框架所撰寫成的線上免費電影網站
+### 這是一個使用python爬蟲和Flask框架所撰寫成的線上免費電影網站
 ----------------------------------------------------------------
 ## Pyhton Web 開發 (使用PyCharm IDE)
 架構： 使用 Pyhton web Framework => Flask  
@@ -41,4 +41,16 @@ function => 爬蟲程式重點 (最後要把不同的爬蟲整合在一個item.p
 * all_movie.get('key') 或 all_movie['key'] => 均為取出dict中的key值
 ----------------------------------------------------------------
 ## Step 3:  
-搭配Bootstrap建立基底頁面
+搭配Bootstrap建立基底頁面base.html  
+* 利用Jinja語法引用bootstrap core CSS => {% include "html_reference.html" %}  
+* 另外custom CSS需額外寫入html_reference中 => <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
+* Search的參數傳遞：(使用http GET方式)
+  ```
+  <form class="form-inline mt-2 mt-md-0" action="/result">
+     <input class="form-control mr-sm-2" type="text" placeholder="Only Chinese Search..." aria-label="Search" name="search" required>
+     /*透過request.args.get('search')來取得input value*/   
+        <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">
+           <i class="fas fa-search"></i>&nbsp;Search
+        </button>
+  </form>
+  ```  
