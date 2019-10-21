@@ -14,7 +14,7 @@ requests==2.18.4
 urllib3==1.22
 virtualenv==16.0.0
 virtualenv-clone==0.3.0
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 youtube-dl==2018.5.9
 gunicorn==19.8.1
 pytube==9.2.2
